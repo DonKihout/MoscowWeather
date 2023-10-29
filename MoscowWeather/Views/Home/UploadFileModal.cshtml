@@ -1,0 +1,48 @@
+﻿@{
+    Layout = null;
+}
+<div class="modal-backdrop fade show" id="ModalUploadArchiveBackground"></div>
+<div class="modal fade show" id="ModalUploadArchive" aria-modal="true" role="dialog" style="display: block;">
+    <div class="modal-dialog modal-md modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Загрузка архивов погодных условий
+                </h5>
+                <button id="CloseUploadArchive" type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Закрыть">
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="post" enctype="multipart/form-data" asp-controller="Home" asp-action="UploadFile" id="UploadForm">
+                    <div class="row g-3 align-items-center">
+                        <div class="col-3">
+                            <label class="col-form-label">Выберите файл: </label>
+                        </div>
+                        <div class="col-9">
+                            <input type="file" name="files" id="FileInput" multiple class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-12 text-end pt-3">
+                        <input type="submit" class="btn btn-primary float-end" id="UploadArchive" value="Загрузить" disabled />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>  
+</div>
+
+<script>
+    $('#CloseUploadArchive').on('click', function () {
+        $("#ModalUploadArchive").css("display", "none");
+        $("#ModalUploadArchiveBackground").css("display", "none");
+    });
+
+    $('#FileInput').on('change', function () {
+        if ($("#FileInput").val() != '') {
+            $('#UploadArchive').prop('disabled', false);
+        } 
+    });
+</script>

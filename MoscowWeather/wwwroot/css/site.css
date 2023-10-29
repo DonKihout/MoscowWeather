@@ -1,0 +1,47 @@
+html {
+    font-size: 14px;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+    margin-bottom: 60px;
+    background-color: #d1cdcd;
+}
+
+.menu-button {
+    background-color: #d1cdcd;
+}
+
+.weather-icon {
+    width: 50%;
+    height: auto;
+}
+
+a.clickCard {
+    text-decoration: inherit;
+    color: inherit;
+    cursor: pointer;
+}
+
+.card:hover {
+    border: solid;
+    border-width: thin;
+}
+
+.selected {
+    border: solid;
+    border-width: thin;
+}
+
+.table {
+    background: #fff;
+}
+
+.click-archive-button {
+    background-color: #0d6efd;
+    color: #fff;
+}

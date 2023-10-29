@@ -1,0 +1,122 @@
+﻿@model List<PostgreeModelSQL.Entities.WeatherArchive>;
+@{
+    Layout = null;
+}
+<div class="container bg-light rounded-3 p-0 mt-3" id="table">
+    <div class="row">
+        <table class="table table-hover table-bordered">
+            <thead>
+                <tr class="text-center  align-middle">
+                    <th scope="col">@Model.First().Date</th>
+                    <th scope="col">Температура, C°</th>
+                    <th scope="col">Погодные явления</th>
+                    <th scope="col">Давление,<br>мм рт. ст.</th>
+                    <th scope="col">Влажность, %</th>
+                    <th scope="col">Точка росы, C°</th>
+                    <th scope="col">Направление ветра</th>
+                    <th scope="col">Скорость<br>ветра,<br> м/с</th>
+                    <th scope="col">Облачность, %</th>
+                    <th scope="col">Нижняя граница<br>облачности, м</th>
+                    <th scope="col">Горизонтальная <br> видимость, км</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var write in Model)
+                {
+                    <tr class="text-center align-middle">
+                        <td scope="row">@write.Time</td>
+                        <td scope="row">@write.Temperature</td>
+                        <td scope="row">@write.Weather_State</td>
+                        <td scope="row">@write.Atmospheric_Pressure</td>
+                        <td scope="row">@write.Relative_Humidity</td>
+                        <td scope="row">@write.Dew_Point</td>
+                        <td scope="row">@write.Wind_Direction</td>
+                        <td scope="row">@write.Wind_Speed</td>
+                        <td scope="row">@write.Cloud_Cover</td>
+                        <td scope="row">@write.Cloud_Height</td>
+                        <td scope="row">@write.Horizontal_Visibility</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        
+    </div>
+    <div class="row pt-2 bg-light" id="chart">
+<   </div>
+</div>
+
+<script>
+    Highcharts.chart('chart', {
+        title: {
+            text: 'Диаграмма за @Model.First().Date'
+        },
+        xAxis: {
+            type: 'datetime',
+            gridLineWidth: 1,
+            min: Date.UTC(@Model.First().Date.Year, @Model.First().Date.Month, @Model.First().Date.Day,
+                            @Model.First().Time.Hour, @Model.First().Time.Minute),
+            max: Date.UTC(@Model.Last().Date.Year, @Model.Last().Date.Month, @Model.Last().Date.Day,
+                            @Model.Last().Time.Hour, @Model.Last().Time.Minute),
+            tickInterval: 3600000,
+        },
+        yAxis: [
+            {
+                title: {
+                    text: 'Температура'
+                },
+                min: @Model.First().Temperature.ToString().Replace(',', '.') - 10,
+                max: @Model.First().Temperature.ToString().Replace(',', '.') + 10
+            },
+            {
+                title: {
+                    text: 'Атмосферное давление'
+                },
+                min: 650,
+                max: 800,
+                opposite: true
+            }
+
+        ],  
+        series: [{
+            name: 'Температура',
+            data: [
+                @foreach (var write in Model)
+                {
+                    <text>
+                        [
+                            x = Date.UTC(@write.Date.Year, @write.Date.Month, @write.Date.Day,
+                                                            @write.Time.Hour, @write.Time.Minute),
+                            y = @write.Temperature.ToString().Replace(',', '.')
+                         ],
+                    </text>
+                }
+            ],     
+            tooltip: {
+                headerFormat: '',
+                pointFormat: '<b>Температура: {point.y}<b>'
+            }
+        },
+        {
+            name: 'Атм. давление',
+            yAxis : 1,
+            data: [
+                @foreach (var write in Model)
+                {
+                    <text>
+                        [
+                         x = Date.UTC(@write.Date.Year, @write.Date.Month, @write.Date.Day,
+                                                                    @write.Time.Hour, @write.Time.Minute), 
+                         y = @write.Atmospheric_Pressure.ToString().Replace(',', '.')
+                        ],
+                    </text>
+                }
+            ],
+            tooltip: {
+                headerFormat: '',
+                pointFormat: '<b>Атм. давление: {point.y}<b>'
+            }
+        }]
+    });
+
+</script>

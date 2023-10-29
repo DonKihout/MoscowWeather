@@ -1,0 +1,73 @@
+﻿@model Dictionary<string, List<string>>;
+@{
+    Layout = null;
+}
+<div class="modal-backdrop fade show" id="ModalArchiveBackground"></div>
+<div class="modal fade show" id="ModalArchive" aria-modal="true" role="dialog" style="display: block;">
+    <div class="modal-dialog modal-md modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Архивы погодных условий
+                </h5>
+                <button id="CloseArchive" type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Закрыть">
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="accordion" id="accordionExample">
+                    @foreach (var year in Model)
+                    {
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne_@year.Key" aria-expanded="true" aria-controls="collapseOne_@year.Key">
+                                    @year.Key
+                                </button>
+                            </h2>
+                            <div id="collapseOne_@year.Key" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                    <div class="list-group">
+                                        @{
+                                            int mothNumber = 1;
+                                            foreach (var month in year.Value)
+                                            {
+                                                    <button type="button" class="list-group-item text-start archive-button" data-year="@year.Key" data-month="@mothNumber">@month</button>
+                                                mothNumber++;
+                                            }
+                                        }                                      
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }                                 
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="loadArchive" disabled>Выгрузить месяц</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('#CloseArchive').on('click', function () {
+        $("#ModalArchive").css("display", "none");
+        $("#ModalArchiveBackground").css("display", "none");
+    });
+
+    $('.archive-button').on('click', function () {
+        $('.archive-button').removeClass('click-archive-button');
+        $(this).addClass('click-archive-button');
+        $('#loadArchive').prop('disabled', false);
+    });
+
+    $('#loadArchive').on('click', function () {
+        var monthNumber = $('.click-archive-button').attr('data-month');
+        var year = $('.click-archive-button').attr('data-year');
+        if (monthNumber != null && year != null) { 
+            window.location.href = "/Home/SelectedMonth/?monthNumber=" + monthNumber + "&year=" + year;
+        }
+    });
+</script>
